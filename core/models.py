@@ -11,7 +11,7 @@ class SiteConfiguration(models.Model):
     # Hero Section
     hero_title = models.CharField(max_length=255, default="Unveiling the Soul of the Caucasus")
     hero_subtitle = models.TextField(default="Curated expeditions through Georgia's ancient valleys, hidden vineyards, and monolithic peaks.")
-    hero_image_url = models.URLField(max_length=500, help_text="Background image URL for the hero section")
+    hero_image_url = models.URLField(max_length=500, blank=True, null=True, help_text="Background image URL for the hero section")
     
     # About Page (New Dynamic Fields)
     about_title = models.CharField(max_length=255, default="About The Expedition")
