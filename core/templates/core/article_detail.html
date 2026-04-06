@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-24 pb-20 bg-surface-container-lowest">
+    <!-- Hero Header -->
+    <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden rounded-b-[3rem]">
+        <img src="{{ article.image_url|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' }}" alt="{{ article.title }}" class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-10 md:p-20 max-w-4xl mx-auto w-full text-center">
+            <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-6 mx-auto inline-block">{{ article.category }}</span>
+            <h1 class="text-4xl md:text-6xl font-serif italic text-white leading-tight mx-auto mb-4">{{ article.title }}</h1>
+            <p class="text-white/80 font-bold uppercase tracking-widest mt-4">{{ article.created_at|date:"F d, Y" }}</p>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="max-w-3xl mx-auto px-6 mt-16">
+        <div class="prose prose-lg prose-stone max-w-none text-outline leading-relaxed">
+            <!-- Basic linebreaksbr since content is TextField -->
+            {{ article.content|linebreaksbr }}
+        </div>
+        
+        <div class="mt-16 pt-8 border-t border-outline-variant/20 flex justify-between items-center">
+            <a href="{% url 'journal' %}" class="inline-flex items-center gap-2 text-primary font-bold hover:text-secondary transition-colors">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                Back to Journal
+            </a>
+            <div class="flex gap-3">
+                <button onclick="window.print()" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center hover:bg-surface-container-high transition-colors">
+                    <span class="material-symbols-outlined text-outline">print</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

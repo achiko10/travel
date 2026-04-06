@@ -1,0 +1,226 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-28 pb-20 bg-surface-container-lowest">
+    <div class="max-w-5xl mx-auto px-6">
+        <!-- Welcome Header -->
+        <div class="flex items-center gap-6 mb-10">
+            <div class="w-20 h-20 rounded-full bg-primary flex items-center justify-center text-on-primary text-3xl font-bold flex-shrink-0">
+                {{ user.first_name.0|default:user.username.0|upper }}
+            </div>
+            <div>
+                <h1 class="text-4xl font-serif italic text-primary">Welcome back, {{ user.first_name|default:user.username }}!</h1>
+                <p class="text-outline mt-1">Member since {{ user.date_joined|date:"F Y" }}</p>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/20 text-center">
+                <span class="material-symbols-outlined text-secondary text-3xl">explore</span>
+                <p class="text-2xl font-bold text-primary mt-2">{{ bookings_count|default:"0" }}</p>
+                <p class="text-xs text-outline uppercase tracking-widest font-bold">Trips Taken</p>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/20 text-center">
+                <span class="material-symbols-outlined text-secondary text-3xl">event_available</span>
+                <p class="text-2xl font-bold text-primary mt-2">{{ bookings_count|default:"0" }}</p>
+                <p class="text-xs text-outline uppercase tracking-widest font-bold">Bookings</p>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/20 text-center">
+                <span class="material-symbols-outlined text-secondary text-3xl">bookmark</span>
+                <p class="text-2xl font-bold text-primary mt-2">0</p>
+                <p class="text-xs text-outline uppercase tracking-widest font-bold">Saved</p>
+            </div>
+            <div class="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/20 text-center">
+                <span class="material-symbols-outlined text-secondary text-3xl">star</span>
+                <p class="text-2xl font-bold text-primary mt-2">New</p>
+                <p class="text-xs text-outline uppercase tracking-widest font-bold">Member Level</p>
+            </div>
+        </div>
+        
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Sidebar Nav -->
+            <div class="md:col-span-1">
+                <nav class="bg-surface-container-low rounded-2xl p-4 border border-outline-variant/20 sticky top-28">
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#account" onclick="showSection('account')" id="nav-account" class="profile-nav-item active flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-primary bg-primary/10 transition-colors w-full text-left">
+                                <span class="material-symbols-outlined text-xl">person</span> My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#bookings" onclick="showSection('bookings')" id="nav-bookings" class="profile-nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-outline hover:bg-surface-container-high hover:text-primary transition-colors w-full text-left">
+                                <span class="material-symbols-outlined text-xl">event_available</span> My Bookings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#saved" onclick="showSection('saved')" id="nav-saved" class="profile-nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-outline hover:bg-surface-container-high hover:text-primary transition-colors w-full text-left">
+                                <span class="material-symbols-outlined text-xl">bookmark</span> Saved Trips
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#settings" onclick="showSection('settings')" id="nav-settings" class="profile-nav-item flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-outline hover:bg-surface-container-high hover:text-primary transition-colors w-full text-left">
+                                <span class="material-symbols-outlined text-xl">settings</span> Settings
+                            </a>
+                        </li>
+                        <li class="pt-2 mt-2 border-t border-outline-variant/20">
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-error hover:bg-error-container/20 transition-colors w-full text-left cursor-pointer">
+                                    <span class="material-symbols-outlined text-xl">logout</span> Sign Out
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="md:col-span-3">
+                <!-- Account Section -->
+                <div id="section-account" class="profile-section">
+                    <h2 class="text-2xl font-serif italic text-primary mb-6">Account Details</h2>
+                    <div class="bg-surface-container-low rounded-2xl p-8 border border-outline-variant/20 shadow-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-outline mb-1">First Name</p>
+                                <p class="font-bold text-primary text-lg">{{ user.first_name|default:"Not set" }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Last Name</p>
+                                <p class="font-bold text-primary text-lg">{{ user.last_name|default:"Not set" }}</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Email Address</p>
+                                <p class="font-bold text-primary text-lg">{{ user.email }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Username</p>
+                                <p class="font-bold text-primary text-lg">{{ user.username }}</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Member Since</p>
+                                <p class="font-bold text-primary text-lg">{{ user.date_joined|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-outline-variant/20">
+                            <a href="{% url 'password_change' %}" class="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary-container transition-colors">
+                                <span class="material-symbols-outlined text-sm">lock_reset</span>
+                                Change Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bookings Section -->
+                <div id="section-bookings" class="profile-section hidden">
+                    <h2 class="text-2xl font-serif italic text-primary mb-6">My Bookings</h2>
+                    
+                    {% if bookings %}
+                    <div class="grid grid-cols-1 gap-4">
+                        {% for booking in bookings %}
+                        <div class="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/20 flex flex-col md:flex-row gap-6 md:items-center justify-between">
+                            <div class="flex gap-4 items-center">
+                                <img src="{{ booking.expedition.image_url }}" alt="{{ booking.expedition.title }}" class="w-16 h-16 rounded-xl object-cover">
+                                <div>
+                                    <h4 class="font-bold text-primary text-lg">{{ booking.expedition.title }}</h4>
+                                    <p class="text-sm text-outline">{{ booking.travel_date|date:"F d, Y" }} &bull; {{ booking.group_size }} Explorer{{ booking.group_size|pluralize }}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:items-end gap-1">
+                                <span class="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest self-start md:self-auto">{{ booking.get_status_display }}</span>
+                                <p class="font-serif italic text-primary font-bold text-lg">${{ booking.total_price }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="bg-surface-container-low rounded-2xl p-10 border border-outline-variant/20 text-center">
+                        <span class="material-symbols-outlined text-5xl text-outline/40 mb-4 block">luggage</span>
+                        <p class="text-xl font-serif italic text-primary mb-2">Your journey awaits</p>
+                        <p class="text-outline text-sm mb-8">You have no upcoming expeditions yet. When you complete a booking request, we will reach out to confirm here.</p>
+                        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-secondary text-on-secondary px-8 py-3 rounded-2xl font-bold hover:bg-secondary-container transition-colors">
+                            <span class="material-symbols-outlined text-sm">explore</span> Browse Expeditions
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Saved Section -->
+                <div id="section-saved" class="profile-section hidden">
+                    <h2 class="text-2xl font-serif italic text-primary mb-6">Saved Expeditions</h2>
+                    <div class="bg-surface-container-low rounded-2xl p-10 border border-outline-variant/20 text-center">
+                        <span class="material-symbols-outlined text-5xl text-outline/40 mb-4 block">bookmark</span>
+                        <p class="text-xl font-serif italic text-primary mb-2">Nothing saved yet</p>
+                        <p class="text-outline text-sm mb-8">Browse our expeditions and save your favorites.</p>
+                        <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-secondary text-on-secondary px-8 py-3 rounded-2xl font-bold hover:bg-secondary-container transition-colors">
+                            <span class="material-symbols-outlined text-sm">explore</span> Explore Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Settings Section -->
+                <div id="section-settings" class="profile-section hidden">
+                    <h2 class="text-2xl font-serif italic text-primary mb-6">Settings</h2>
+                    <div class="bg-surface-container-low rounded-2xl p-8 border border-outline-variant/20 shadow-sm space-y-6">
+                        <div class="flex items-center justify-between py-4 border-b border-outline-variant/20">
+                            <div>
+                                <p class="font-bold text-primary">Email Notifications</p>
+                                <p class="text-xs text-outline">Receive updates about your bookings</p>
+                            </div>
+                            <div class="w-12 h-6 rounded-full bg-primary relative cursor-pointer">
+                                <div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between py-4 border-b border-outline-variant/20">
+                            <div>
+                                <p class="font-bold text-primary">Change Password</p>
+                                <p class="text-xs text-outline">Update your account password</p>
+                            </div>
+                            <a href="{% url 'password_change' %}" class="text-secondary font-bold text-sm hover:underline flex items-center gap-1">
+                                Update <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                            </a>
+                        </div>
+                        <div class="pt-4">
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="text-error font-bold text-sm flex items-center gap-2 hover:underline cursor-pointer">
+                                    <span class="material-symbols-outlined text-sm">logout</span> Sign Out of Account
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function showSection(name) {
+    // hide all sections
+    document.querySelectorAll('.profile-section').forEach(function(s) { s.classList.add('hidden'); });
+    // deactivate all nav items
+    document.querySelectorAll('.profile-nav-item').forEach(function(n) {
+        n.classList.remove('text-primary', 'bg-primary/10');
+        n.classList.add('text-outline');
+    });
+    // show target section
+    document.getElementById('section-' + name).classList.remove('hidden');
+    // activate nav item
+    var nav = document.getElementById('nav-' + name);
+    nav.classList.add('text-primary', 'bg-primary/10');
+    nav.classList.remove('text-outline');
+    return false;
+}
+
+// Handle direct anchor links (from mobile nav)
+window.addEventListener('load', function() {
+    var hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('section-' + hash)) {
+        showSection(hash);
+    }
+});
+</script>
+{% endblock %}

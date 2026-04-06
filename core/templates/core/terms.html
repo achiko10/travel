@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-32 pb-20 bg-surface-container-lowest">
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 class="text-4xl font-serif italic text-primary mb-10">Terms of Service</h1>
+        <div class="prose prose-stone text-outline max-w-none space-y-6">
+            <p><strong>Last Updated: {{ "now"|date:"F Y" }}</strong></p>
+            <p>Welcome to The Editorial Expedition. By booking our curated excursions, using our web platform, or engaging our concierge services, you agree to these Terms of Service.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">1. Bookings &amp; Payments</h3>
+            <p>Booking requests made via the website require final confirmation by our team. All confirmed bookings require a 30% non-refundable deposit to secure your dates. The remaining balance must be cleared 14 days prior to your arrival.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">2. Cancellations &amp; Modifications</h3>
+            <p>Cancellations made 30 days prior will be fully refunded minus the deposit. Cancellations made within 14 days of travel are entirely non-refundable. We highly recommend purchasing independent travel insurance to cover unforeseen circumstances.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">3. User Accounts</h3>
+            <p>By registering on the site, you agree to maintain the confidentiality of your account credentials. You are responsible for all activities that occur under your account.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">4. Liability</h3>
+            <p>The Editorial Expedition acting as a tour operator takes all reasonable precautions to maintain traveler safety. We are not liable for force majeure events, delays, or damages caused by third-party operators, airlines, or unforeseeable natural events.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">5. Revisions</h3>
+            <p>We reserve the right to revise these Terms of Service at any time without prior notice. By using this website, you agree to be bound by the current version of these Terms.</p>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+  <main class="pt-24 pb-32">
+    <!-- Hero Section -->
+    <section class="px-6 max-w-7xl mx-auto mb-16">
+      <div class="relative overflow-hidden rounded-[2.5rem] bg-surface-container-low min-h-[600px] flex flex-col justify-end p-8 md:p-16">
+        <div class="absolute inset-0 z-0">
+          <img class="w-full h-full object-cover" src="{{ site.hero_image_url|default:'https://lh3.googleusercontent.com/aida-public/AB6AXuBoJyvC6JISUH2X3UsrQS-jVVCS7JHAIVQIFz274NpAje522P6uHCDiOMpviGHPnpg0lKBdoVbc_ICWGwZdN34_5SmhVhDdjyikC9uFb0Um7BbI8JrdYT6EZmdsAp7GMRQ4KEQIM-J48bSUnyQ4YRQggt90HooZ3P8X7yjcltfKr8Nqd-noWwKUjD_wMwscPM5JrdB10kiAbFO39Yj-GLU-R02vG0kgXkpYfzLLLOgjxvf_bJNXP4l7oJSKb6yZOVuzhZ6qL5VzVUcc' }}"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="relative z-10 max-w-2xl">
+          <h2 class="text-5xl md:text-7xl font-serif italic text-surface leading-tight tracking-tight mb-6">{{ site.hero_title|default:"Unveiling the Soul of the Caucasus" }}</h2>
+          <p class="text-surface-container-highest/90 text-lg md:text-xl font-light mb-8 max-w-lg">{{ site.hero_subtitle|default:"Curated expeditions through Georgia's ancient valleys, hidden vineyards, and monolithic peaks." }}</p>
+        </div>
+        
+        <!-- Quick Booking Form (Replaces Search Panel) -->
+        <form action="{% url 'quick_booking' %}" method="POST" class="relative z-20 bg-surface-container-lowest/90 backdrop-blur-md rounded-3xl p-4 md:p-2 grid grid-cols-1 md:grid-cols-4 gap-2 shadow-xl border border-outline-variant/15">
+          {% csrf_token %}
+          <div class="flex items-center gap-3 px-6 py-4 border-r border-outline-variant/10">
+            <span class="material-symbols-outlined text-secondary">person</span>
+            <div class="flex flex-col flex-1">
+              <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Full Name</span>
+              <input name="full_name" required class="w-full bg-transparent border-none p-0 focus:ring-0 text-primary font-semibold placeholder:text-outline-variant italic" placeholder="Your Name" type="text"/>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 px-6 py-4 border-r border-outline-variant/10">
+            <span class="material-symbols-outlined text-secondary">call</span>
+            <div class="flex flex-col flex-1">
+              <span class="text-[10px] uppercase tracking-widest text-outline font-bold">WhatsApp / Phone</span>
+              <input name="phone_number" required class="w-full bg-transparent border-none p-0 focus:ring-0 text-primary font-semibold placeholder:text-outline-variant italic" placeholder="+995 ..." type="text"/>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 px-6 py-4 border-r border-outline-variant/10">
+            <span class="material-symbols-outlined text-secondary">edit_note</span>
+            <div class="flex flex-col flex-1">
+              <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Preferences</span>
+              <input name="notes" class="w-full bg-transparent border-none p-0 focus:ring-0 text-primary font-semibold placeholder:text-outline-variant italic" placeholder="Tour or question" type="text"/>
+            </div>
+          </div>
+          <button type="submit" class="bg-secondary text-on-secondary rounded-2xl md:rounded-[1.2rem] py-4 md:py-0 font-bold flex items-center justify-center gap-2 hover:bg-secondary-container transition-all active:scale-95">
+            <span class="material-symbols-outlined">send</span> Request Tour
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Category Quick Links -->
+    <section class="px-6 max-w-7xl mx-auto mb-16 overflow-x-auto no-scrollbar">
+      <div class="flex gap-4 min-w-max pb-4">
+        {% for cat in categories %}
+        <a href="?tour_type={{ cat.name|urlencode }}#results" class="bg-surface-container-low p-6 rounded-[2rem] flex items-center gap-4 flex-1 min-w-[280px] hover:bg-surface-container-high transition-colors cursor-pointer">
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined" data-icon="{{ cat.icon_name|default:'map' }}">{{ cat.icon_name|default:'map' }}</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-primary">{{ cat.name }}</h3>
+            <p class="text-sm text-outline">{{ cat.description }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Top Destinations -->
+    <section class="px-6 max-w-7xl mx-auto mb-20">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h2 class="text-4xl font-serif italic text-primary mb-2">Top Destinations</h2>
+          <p class="text-outline">The quintessential Georgian experience</p>
+        </div>
+        <a href="?location=" class="text-secondary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
+          View All <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        {% for dest in destinations %}
+        <a href="{% url 'destination_detail' dest.pk %}" class="group cursor-pointer block">
+          <div class="relative aspect-[3/4] rounded-[2rem] overflow-hidden mb-4">
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ dest.image_url }}"/>
+            <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/60 to-transparent">
+              <span class="text-tertiary-fixed-dim text-xs font-bold uppercase tracking-widest">{{ dest.region }}</span>
+              <p class="text-white font-serif text-xl italic">{{ dest.name }}</p>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Featured Tours & Filters -->
+    <section class="px-6 max-w-7xl mx-auto mb-20">
+      <div class="mb-12">
+        {% if featured_media %}
+        <!-- ID defined to allow JS click handler -->
+        <div id="video-modal-trigger" class="relative w-full aspect-video rounded-[3rem] overflow-hidden mb-12 shadow-2xl group cursor-pointer" onclick="window.open('{{ featured_media.video_url|default:featured_media.image_url }}', '_blank')">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="{{ featured_media.image_url }}"/>
+          <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <div class="w-20 h-20 rounded-full bg-surface/30 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
+              <span class="material-symbols-outlined text-4xl" data-icon="play_arrow" data-variation-settings="'FILL' 1">play_arrow</span>
+            </div>
+          </div>
+          <div class="absolute bottom-8 left-8">
+            <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-tighter">{{ featured_media.title }}</span>
+          </div>
+        </div>
+        {% endif %}
+        
+        <div class="flex flex-col lg:flex-row gap-12">
+          <!-- Filters Panel: FORM 2 -->
+          <aside class="w-full lg:w-72 flex-shrink-0">
+            <form id="side-filters-form" action="{% url 'home' %}#results" method="GET" class="sticky top-28 bg-surface-container-low rounded-[2rem] p-8">
+              
+              <!-- Retain top search selections implicitly via hidden inputs to allow combo-filtering! -->
+              {% if search_location %}<input type="hidden" name="location" value="{{ search_location }}">{% endif %}
+              {% if search_category %}<input type="hidden" name="category" value="{{ search_category }}">{% endif %}
+            
+              <div class="flex items-center justify-between mb-8">
+                <h3 class="font-serif italic text-xl text-primary">Filters</h3>
+                <span class="material-symbols-outlined text-outline" data-icon="tune">tune</span>
+              </div>
+              
+              <!-- FILTER: Price -->
+              <div class="mb-8 relative">
+                <label class="text-xs font-bold uppercase tracking-widest text-outline mb-4 block">Max Price Range</label>
+                <input type="range" name="max_price" min="200" max="2500" step="50" value="{{ search_max_price }}" class="w-full" oninput="document.getElementById('price-val').innerText = '$' + this.value" onchange="this.form.submit()">
+                <div class="flex justify-between text-xs font-bold text-primary mt-3">
+                  <span>$200</span>
+                  <span id="price-val">${{ search_max_price }}</span>
+                </div>
+              </div>
+              
+              <!-- FILTER: Duration -->
+              <div class="mb-8">
+                <label class="text-xs font-bold uppercase tracking-widest text-outline mb-4 block">Duration</label>
+                <div class="space-y-3">
+                  <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" name="duration" value="1-4" class="rounded-lg border-outline-variant text-secondary focus:ring-secondary w-5 h-5" onchange="this.form.submit()" {% if "1-4" in search_durations %}checked{% endif %}>
+                    <span class="text-sm font-medium text-primary">1-4 Days</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" name="duration" value="4-7" class="rounded-lg border-outline-variant text-secondary focus:ring-secondary w-5 h-5" onchange="this.form.submit()" {% if "4-7" in search_durations %}checked{% endif %}>
+                    <span class="text-sm font-medium text-primary">4-7 Days</span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" name="duration" value="7+" class="rounded-lg border-outline-variant text-secondary focus:ring-secondary w-5 h-5" onchange="this.form.submit()" {% if "7+" in search_durations %}checked{% endif %}>
+                    <span class="text-sm font-medium text-primary">7+ Days</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- FILTER: Tour Type Chips -->
+              <div class="mb-8">
+                <label class="text-xs font-bold uppercase tracking-widest text-outline mb-4 block">Tour Type</label>
+                <div class="flex flex-wrap gap-2">
+                  {% for cat in categories %}
+                  <!-- We use a submit button styled as a chip. We clear duration on pure category reset if desired, but here we just submit the label -->
+                  <button type="submit" name="tour_type" value="{{ cat.name }}" class="px-4 py-2 rounded-full text-xs font-bold transition-colors cursor-pointer {% if request.GET.tour_type == cat.name %}bg-secondary text-on-secondary{% else %}bg-surface-container-high text-primary hover:bg-outline-variant/20{% endif %}">
+                    {{ cat.name }}
+                  </button>
+                  {% endfor %}
+                </div>
+              </div>
+              
+            </form>
+          </aside>
+          
+          <!-- Tour Grid -->
+          <div class="flex-grow" id="results">
+            <h2 class="text-3xl font-serif italic text-primary mb-8">
+                {% if expeditions|length == 0 %} No Expeditions Found
+                {% else %} Curated Expeditions ({{ expeditions|length }})
+                {% endif %}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {% for exp in expeditions %}
+              <a href="{% url 'expedition_detail' exp.pk %}" class="bg-surface-container-lowest rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-500 flex flex-col cursor-pointer block">
+                <div class="relative h-64 overflow-hidden flex-shrink-0">
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ exp.image_url }}"/>
+                  <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full font-bold text-primary shadow-sm">${{ exp.price }}</div>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="material-symbols-outlined text-secondary text-sm" data-icon="schedule">schedule</span>
+                    <span class="text-xs font-bold text-outline uppercase tracking-widest">{{ exp.duration_days }} Days • {{ exp.category.name|default:"Trekking" }}</span>
+                  </div>
+                  <h3 class="text-2xl font-serif text-primary mb-4 leading-tight italic">{{ exp.title }}</h3>
+                  <p class="text-sm text-outline mb-6 leading-relaxed flex-1">{{ exp.description }}</p>
+                  
+                  <!-- BOOKING: Link to Detail Page -->
+                  <div class="w-full border-2 border-primary text-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-2 group-hover:bg-primary group-hover:text-on-primary transition-colors mt-auto">
+                    View Expedition Details <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}

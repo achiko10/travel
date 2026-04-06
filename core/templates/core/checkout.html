@@ -1,0 +1,88 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-32 pb-20 bg-surface-container-lowest flex items-center justify-center">
+    <div class="max-w-md w-full mx-auto px-6 text-center">
+        <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="material-symbols-outlined text-6xl text-primary">check_circle</span>
+        </div>
+        {% if is_success and quick_lead %}
+            <h1 class="text-4xl font-serif italic text-primary mb-4">Request Received!</h1>
+            <p class="text-outline mb-8">Thank you, <strong>{{ quick_lead.full_name }}</strong>. We have received your quick inquiry and our team will contact you at <strong>{{ quick_lead.phone_number }}</strong> shortly.</p>
+            
+            <div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/20 mb-8 text-left space-y-3">
+                <div class="flex justify-between border-b border-outline-variant/20 pb-3">
+                    <span class="text-outline text-sm font-bold uppercase">Name</span>
+                    <span class="text-primary font-bold">{{ quick_lead.full_name }}</span>
+                </div>
+                <div class="flex justify-between border-b border-outline-variant/20 pb-3">
+                    <span class="text-outline text-sm font-bold uppercase">Phone</span>
+                    <span class="text-primary font-bold">{{ quick_lead.phone_number }}</span>
+                </div>
+                {% if quick_lead.notes %}
+                <div class="pt-1">
+                    <span class="text-outline text-sm font-bold uppercase block mb-1">Notes</span>
+                    <p class="text-primary text-sm italic">"{{ quick_lead.notes }}"</p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <a href="{% url 'home' %}" class="w-full bg-primary text-on-primary px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-lg mb-4 text-center cursor-pointer">
+                Return to Home
+            </a>
+        {% else %}
+            <h1 class="text-4xl font-serif italic text-primary mb-4">Booking Requested</h1>
+            <p class="text-outline mb-8">Thank you, {{ user.first_name|default:"Traveler" }}. Your request for <strong>{{ exp.title }}</strong> has been securely logged in our system. You can finalize your booking via WhatsApp.</p>
+            
+            <div class="bg-surface-container-low p-6 rounded-3xl border border-outline-variant/20 mb-8 text-left space-y-3">
+                <div class="flex justify-between border-b border-outline-variant/20 pb-3">
+                    <span class="text-outline text-sm font-bold uppercase">Expedition</span>
+                    <span class="text-primary font-bold">{{ exp.title }}</span>
+                </div>
+                <div class="flex justify-between border-b border-outline-variant/20 pb-3">
+                    <span class="text-outline text-sm font-bold uppercase">Date</span>
+                    <span class="text-primary font-bold">{{ booking.travel_date }}</span>
+                </div>
+                <div class="flex justify-between border-b border-outline-variant/20 pb-3">
+                    <span class="text-outline text-sm font-bold uppercase">Group</span>
+                    <span class="text-primary font-bold">{{ booking.group_size }} Explorer{{ booking.group_size|pluralize }}</span>
+                </div>
+                <div class="flex justify-between pt-1">
+                    <span class="text-outline text-sm font-bold uppercase">Total Due</span>
+                    <span class="text-primary font-bold">${{ booking.total_price }}</span>
+                </div>
+            </div>
+            
+            <script>
+                function finishViaWhatsApp() {
+                    var tour = "{{ exp.title|escapejs }}";
+                    var date = "{{ booking.travel_date|date:'Y-m-d' }}";
+                    var size = "{{ booking.group_size }}";
+                    var name = "{{ booking.full_name|escapejs }}";
+                    var total = "{{ booking.total_price }}";
+                    var whatsappPhone = "{{ site.whatsapp_number|default:'+995555010203'|cut:' '|cut:'+' }}";
+
+                    var msg = "Hello! I have submitted a booking request via the website:\n\n"
+                        + "🏔 Tour: " + tour + "\n"
+                        + "📅 Date: " + date + "\n"
+                        + "👥 Group: " + size + " person(s)\n"
+                        + "💰 Est. Total: $" + total + " USD\n"
+                        + "👤 Name: " + name + "\n\n"
+                        + "Please let me know the next steps for payment and confirmation. Thank you!";
+
+                    window.open("https://wa.me/" + whatsappPhone + "?text=" + encodeURIComponent(msg), "_blank");
+                }
+            </script>
+
+            <button onclick="finishViaWhatsApp()" class="w-full bg-[#25D366] text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#20bd5a] transition-colors shadow-lg mb-4 text-center cursor-pointer">
+                <span class="material-symbols-outlined">whatsapp</span>
+                Complete on WhatsApp
+            </button>
+
+            <a href="{% url 'profile' %}" class="block text-primary font-bold text-sm hover:underline">
+                Go to My Profile
+            </a>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

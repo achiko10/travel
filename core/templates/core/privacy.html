@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-32 pb-20 bg-surface-container-lowest">
+    <div class="max-w-4xl mx-auto px-6">
+        <h1 class="text-4xl font-serif italic text-primary mb-10">Privacy Policy</h1>
+        <div class="prose prose-stone text-outline max-w-none space-y-6">
+            <p><strong>Last Updated: {{ "now"|date:"F Y" }}</strong></p>
+            <p>At The Editorial Expedition, your privacy is of utmost importance to us. This Privacy Policy details how we handle your personal data when you interact with our curated travel platform.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">1. Data Collection</h3>
+            <p>We collect essential information required to facilitate your high-end travel experience, including but not limited to your name, contact details, email address, password hashes, and specific travel preferences. We also securely track your saved trips and past bookings to offer personalized recommendations.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">2. Usage of Data</h3>
+            <p>Your data is exclusively used to coordinate your reservations with local luxury partners and ensure your journey through the Caucasus is flawless. We use your email to send booking confirmations and account-related updates only.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">3. Data Sharing</h3>
+            <p>We do not sell, rent, or trade your personal information. We only share necessary details (such as your name and dietary restrictions) with our trusted local partners (hotels, guides, drivers) solely for the purpose of fulfilling your booked expedition.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">4. Securing Your Information</h3>
+            <p>Our platform uses industry-standard encryption for data transmission and password storage. However, please be aware that no electronic transmission or storage method is 100% secure.</p>
+            
+            <h3 class="text-xl font-bold text-primary mt-8 mb-4">5. Contact Us</h3>
+            <p>If you have any questions or concerns about this privacy policy, please contact us at privacy@editorialexpedition.com or via WhatsApp at {{ site.whatsapp_number|default:"+995 555 010 203" }}.</p>
+        </div>
+    </div>
+</main>
+{% endblock %}

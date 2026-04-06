@@ -1,0 +1,166 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-24 pb-20 bg-surface-container-lowest">
+
+    <!-- Hero -->
+    <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden rounded-b-[3rem]">
+        <img src="{{ exp.image_url }}" alt="{{ exp.title }}" class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10 md:p-20">
+            <div class="max-w-7xl mx-auto w-full">
+                <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-4 inline-block">{{ exp.category.name|default:"Expedition" }}</span>
+                <h1 class="text-4xl md:text-6xl font-serif italic text-white leading-tight mb-4">{{ exp.title }}</h1>
+                <div class="flex flex-wrap items-center gap-3 text-white/90">
+                    <span class="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-4 py-2 text-sm font-bold">
+                        <span class="material-symbols-outlined text-sm">schedule</span> {{ exp.duration_days }} Days
+                    </span>
+                    <span class="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-4 py-2 text-sm font-bold">
+                        <span class="material-symbols-outlined text-sm">payments</span> ${{ exp.price }} USD
+                    </span>
+                    {% if exp.location %}
+                    <span class="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-4 py-2 text-sm font-bold">
+                        <span class="material-symbols-outlined text-sm">location_on</span> {{ exp.location.name }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="max-w-7xl mx-auto px-6 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+        <!-- Left: Info -->
+        <div class="lg:col-span-2 space-y-12">
+            <div>
+                <h2 class="text-3xl font-serif italic text-primary mb-4">About This Expedition</h2>
+                <p class="text-outline leading-relaxed text-lg">{{ exp.description }}</p>
+            </div>
+
+            <div>
+                <h2 class="text-3xl font-serif italic text-primary mb-6">Sample Itinerary</h2>
+                <div class="space-y-0 relative">
+                    <div class="absolute left-4 top-6 bottom-6 w-0.5 bg-outline-variant/30"></div>
+                    <div class="relative flex gap-6 pb-8">
+                        <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-bold text-xs flex-shrink-0 z-10">1</div>
+                        <div>
+                            <h4 class="font-bold text-primary text-lg">Day 1 — Arrival &amp; Welcome</h4>
+                            <p class="text-outline text-sm mt-2">Airport pickup, hotel check-in, orientation walk, traditional Georgian welcome dinner.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex gap-6 pb-8">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xs flex-shrink-0 z-10">2</div>
+                        <div>
+                            <h4 class="font-bold text-primary text-lg">Days 2–{{ exp.duration_days|add:"-1" }} — The Expedition</h4>
+                            <p class="text-outline text-sm mt-2">Guided cultural immersion, village visits, regional cuisine experiences, and breathtaking landscape exploration.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex gap-6">
+                        <div class="w-8 h-8 rounded-full bg-outline-variant flex items-center justify-center text-primary font-bold text-xs flex-shrink-0 z-10">{{ exp.duration_days }}</div>
+                        <div>
+                            <h4 class="font-bold text-primary text-lg">Day {{ exp.duration_days }} — Farewell &amp; Departure</h4>
+                            <p class="text-outline text-sm mt-2">Final breakfast, souvenir time, airport transfer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Included -->
+            <div class="bg-surface-container-low rounded-[2rem] p-8 border border-outline-variant/20">
+                <h2 class="text-2xl font-serif italic text-primary mb-6">What's Included</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">Hotel accommodation ({{ exp.duration_days }} nights)</span></div>
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">All local transportation</span></div>
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">Professional English guide</span></div>
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">Welcome dinner</span></div>
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">All entry fees &amp; permits</span></div>
+                    <div class="flex items-center gap-3"><span class="material-symbols-outlined text-secondary text-lg">check_circle</span><span class="text-sm font-medium text-primary">Wine &amp; food tastings</span></div>
+                </div>
+                <div class="pt-5 border-t border-outline-variant/20">
+                    <p class="text-xs font-bold text-outline uppercase tracking-widest mb-3">Not Included</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-surface-container px-3 py-1 rounded-full text-outline border border-outline-variant/20">International flights</span>
+                        <span class="text-xs bg-surface-container px-3 py-1 rounded-full text-outline border border-outline-variant/20">Travel insurance</span>
+                        <span class="text-xs bg-surface-container px-3 py-1 rounded-full text-outline border border-outline-variant/20">Personal expenses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Booking Form -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-28 bg-surface-container-low rounded-[2.5rem] border border-outline-variant/20 shadow-xl overflow-hidden">
+                <div class="p-8">
+                    <h3 class="text-2xl font-serif italic text-primary mb-1">Book This Expedition</h3>
+                    <p class="text-outline text-sm mb-6">Fill in details and we'll confirm via WhatsApp.</p>
+
+                    <div class="flex justify-between items-baseline mb-6 pb-6 border-b border-outline-variant/20">
+                        <span class="text-xs font-bold text-outline uppercase tracking-widest">Price / Person</span>
+                        <span class="text-4xl font-serif italic text-primary">${{ exp.price }}</span>
+                    </div>
+
+                    <!-- BOOKING FORM -->
+                    <form action="{% url 'checkout' exp.pk %}" method="POST" class="space-y-4">
+                        {% csrf_token %}
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-outline mb-1">Your Full Name *</label>
+                            <input type="text" name="full_name" required placeholder="e.g. Giorgi Beridze"
+                                class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-medium text-sm placeholder:text-outline-variant">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-outline mb-1">Travel Date *</label>
+                            <input type="date" name="travel_date" required
+                                class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-bold text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-outline mb-1">Group Size *</label>
+                            <select name="group_size" id="b-size" required
+                                class="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-bold text-sm">
+                                <option value="1">1 Explorer</option>
+                                <option value="2">2 Explorers</option>
+                                <option value="3">3 Explorers</option>
+                                <option value="4">4 Explorers</option>
+                                <option value="5">5+ Private Group</option>
+                            </select>
+                        </div>
+
+                        <!-- Live Total Calculator -->
+                        <div class="bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 flex justify-between items-center">
+                            <span class="text-xs font-bold text-outline uppercase tracking-widest">Est. Total</span>
+                            <span id="total-price" class="text-xl font-serif italic text-primary font-bold">${{ exp.price }}</span>
+                        </div>
+
+                        <!-- MAIN ACTION -->
+                        <button type="submit" class="w-full bg-primary text-on-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all cursor-pointer mt-2 shadow-lg">
+                            <span class="material-symbols-outlined text-lg">check_circle</span>
+                            Confirm Booking
+                        </button>
+
+                        <!-- Quick Question -->
+                        <a href="https://wa.me/{{ site.whatsapp_number|default:'+995555010203'|cut:' '|cut:'+' }}?text={{ exp.title|urlencode }}%20-%20Quick%20question" target="_blank"
+                            class="w-full border-2 border-[#25D366] text-[#25D366] py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#25D366]/10 transition-colors cursor-pointer text-sm block text-center">
+                            <span class="material-symbols-outlined text-sm">chat</span>
+                            Ask a Question First
+                        </a>
+                    </form>
+
+                    <div class="mt-5 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-outline text-sm">verified_user</span>
+                        <p class="text-[9px] text-outline uppercase tracking-widest font-bold">Free cancellation • Flexible dates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    var basePrice = parseInt("{{ exp.price }}");
+
+    document.getElementById('b-size').addEventListener('change', function() {
+        var total = basePrice * parseInt(this.value);
+        document.getElementById('total-price').innerText = '$' + total;
+    });
+</script>
+{% endblock %}

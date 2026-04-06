@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>{% block title %}{{ site.site_name|default:"The Editorial Expedition" }}{% endblock %} | Georgian Curated Travel</title>
+  <meta name="description" content="{{ site.seo_description|default:'Curated expeditions through Georgia\'s ancient valleys, hidden vineyards, and monolithic peaks.' }}"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-background": "#1b1d0e", "secondary-fixed-dim": "#ffb596", "surface-container-highest": "#e4e4cc",
+            "inverse-surface": "#303221", "inverse-on-surface": "#f2f2d9", "secondary-container": "#fe9e72",
+            "on-error": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#fbfbe2",
+            "outline": "#72796e", "primary-fixed": "#bcf0ae", "tertiary-fixed-dim": "#96ccff",
+            "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "tertiary-container": "#025483",
+            "surface-variant": "#e4e4cc", "tertiary-fixed": "#cee5ff", "on-primary-fixed": "#002201",
+            "surface-dim": "#dbdcc3", "on-primary": "#ffffff", "surface-container-low": "#f5f5dc",
+            "on-tertiary-fixed-variant": "#004a75", "surface-tint": "#3b6934", "on-secondary-fixed": "#360f00",
+            "secondary": "#944925", "primary-container": "#2d5a27", "surface-container-high": "#eaead1",
+            "on-tertiary-fixed": "#001d32", "error": "#ba1a1a", "primary-fixed-dim": "#a1d494",
+            "on-primary-fixed-variant": "#23501e", "on-secondary-container": "#773310",
+            "surface-container": "#efefd7", "surface": "#fbfbe2", "on-secondary-fixed-variant": "#76320f",
+            "background": "#fbfbe2", "outline-variant": "#c2c9bb", "on-error-container": "#93000a",
+            "secondary-fixed": "#ffdbcd", "primary": "#154212", "on-primary-container": "#9dd090",
+            "inverse-primary": "#a1d494", "on-surface": "#1b1d0e", "on-secondary": "#ffffff",
+            "tertiary": "#003c60", "on-tertiary-container": "#8ec8fe", "on-surface-variant": "#42493e"
+          },
+          fontFamily: { "headline": ["Noto Serif"], "body": ["Manrope"], "label": ["Manrope"] },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    body { font-family: 'Manrope', sans-serif; min-height: max(884px, 100dvh); }
+    h1, h2, h3, h4, .font-serif { font-family: 'Noto Serif', serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #944925; cursor: pointer; margin-top: -7px; box-shadow: 0 1px 4px rgba(0,0,0,0.25); }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #c2c9bb; border-radius: 4px; }
+
+    /* Mobile drawer */
+    #mobile-drawer { transform: translateX(-100%); transition: transform 0.3s ease; }
+    #mobile-drawer.open { transform: translateX(0); }
+    #drawer-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    #drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body class="bg-background text-on-background selection:bg-secondary/30 pb-20 md:pb-0">
+
+  <!-- ─── Mobile Drawer ──────────────────────────────────────────────────── -->
+  <div id="drawer-backdrop" onclick="closeMobileMenu()" class="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"></div>
+  <div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#fbfbe2] z-50 shadow-2xl flex flex-col p-8">
+    <div class="flex justify-between items-center mb-10">
+      <span class="font-black text-[#154212] text-lg">The Editorial</span>
+      <button onclick="closeMobileMenu()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center cursor-pointer hover:bg-surface-container-highest transition-colors">
+        <span class="material-symbols-outlined text-primary">close</span>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 flex-1">
+      <a href="{% url 'home' %}" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-primary hover:bg-surface-container-high transition-colors">
+        <span class="material-symbols-outlined">explore</span> Explore
+      </a>
+      <a href="{% url 'journal' %}" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-outline hover:bg-surface-container-high hover:text-primary transition-colors">
+        <span class="material-symbols-outlined">menu_book</span> Journal
+      </a>
+      <a href="{% url 'about' %}" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-outline hover:bg-surface-container-high hover:text-primary transition-colors">
+        <span class="material-symbols-outlined">public</span> About Georgia
+      </a>
+      <div class="border-t border-outline-variant/20 my-4"></div>
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-outline hover:bg-surface-container-high hover:text-primary transition-colors">
+        <span class="material-symbols-outlined">person</span> My Profile
+      </a>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-error hover:bg-error-container/20 transition-colors w-full text-left cursor-pointer">
+          <span class="material-symbols-outlined">logout</span> Sign Out
+        </button>
+      </form>
+      {% else %}
+      <a href="{% url 'login' %}" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-outline hover:bg-surface-container-high hover:text-primary transition-colors">
+        <span class="material-symbols-outlined">login</span> Sign In
+      </a>
+      <a href="{% url 'register' %}" onclick="closeMobileMenu()" class="flex items-center justify-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors mt-2">
+        <span class="material-symbols-outlined text-sm">person_add</span> Register Free
+      </a>
+      {% endif %}
+    </nav>
+    <div class="pt-6 border-t border-outline-variant/20">
+      <p class="text-xs text-outline opacity-60">© {{ site.site_name|default:"The Editorial Expedition" }}</p>
+    </div>
+  </div>
+
+  <!-- ─── Header ────────────────────────────────────────────────────────────── -->
+  <header class="fixed top-0 w-full z-30 bg-[#fbfbe2]/80 backdrop-blur-xl shadow-[0_4px_24px_rgba(27,29,14,0.06)]">
+    <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+      <div class="flex items-center gap-4">
+        <button onclick="openMobileMenu()" class="material-symbols-outlined text-[#154212] cursor-pointer active:scale-95 transition-transform bg-transparent border-none p-0" aria-label="Open menu">menu</button>
+        <a href="{% url 'home' %}" class="text-xl md:text-2xl font-black text-[#154212] tracking-tighter">{{ site.site_name|default:"The Editorial Expedition" }}</a>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a class="{% if request.resolver_match.url_name == 'home' %}text-[#944925] font-bold border-b-2 border-[#944925] pb-1{% else %}text-[#154212] font-medium hover:text-[#944925] transition-colors{% endif %}" href="{% url 'home' %}">Explore</a>
+        <a class="{% if request.resolver_match.url_name == 'journal' %}text-[#944925] font-bold border-b-2 border-[#944925] pb-1{% else %}text-[#154212] font-medium hover:text-[#944925] transition-colors{% endif %}" href="{% url 'journal' %}">Journal</a>
+        <a class="{% if request.resolver_match.url_name == 'about' %}text-[#944925] font-bold border-b-2 border-[#944925] pb-1{% else %}text-[#154212] font-medium hover:text-[#944925] transition-colors{% endif %}" href="{% url 'about' %}">About Georgia</a>
+        {% if user.is_authenticated %}
+        <a class="{% if request.resolver_match.url_name == 'profile' %}text-[#944925] font-bold border-b-2 border-[#944925] pb-1{% else %}text-[#154212] font-medium hover:text-[#944925] transition-colors{% endif %}" href="{% url 'profile' %}">Profile</a>
+        <form action="{% url 'logout' %}" method="post" class="inline m-0 p-0">
+          {% csrf_token %}
+          <button type="submit" class="text-[#154212] font-medium hover:text-[#944925] transition-colors cursor-pointer">Logout</button>
+        </form>
+        <a href="{% url 'profile' %}" class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary/10 block hover:scale-105 transition-transform">
+          <img alt="Profile" src="https://ui-avatars.com/api/?name={{ user.first_name|default:user.username }}&background=154212&color=fff"/>
+        </a>
+        {% else %}
+        <a class="text-[#154212] font-medium hover:text-[#944925] transition-colors" href="{% url 'login' %}">Sign In</a>
+        <a class="bg-primary text-on-primary px-5 py-2 rounded-xl text-sm font-bold hover:bg-primary/90 transition-colors" href="{% url 'register' %}">Register Free</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <!-- ─── Footer ────────────────────────────────────────────────────────────── -->
+  <footer class="w-full pt-16 pb-32 md:pb-16 rounded-t-[3rem] bg-[#154212] text-[#fbfbe2] relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+    <div class="flex flex-col md:flex-row justify-between items-start gap-12 px-10 max-w-7xl mx-auto relative z-10">
+      <div class="max-w-xs">
+        <h2 class="text-[#944925] font-serif text-3xl italic mb-6">{{ site.site_name|default:"The Editorial Expedition" }}</h2>
+        <p class="text-sm font-light leading-relaxed opacity-70 mb-8">{{ site.about_text|default:"A boutique travel studio specializing in deep-culture and high-adventure immersion across the Georgian Caucasus." }}</p>
+        <div class="flex gap-4">
+          {% if site.facebook_url %}
+          <a href="{{ site.facebook_url }}" target="_blank" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 transition-colors">
+            <span class="material-symbols-outlined text-lg">share</span>
+          </a>
+          {% endif %}
+          <a href="mailto:{{ site.contact_email|default:'hello@editorialexpedition.com' }}?subject=Expedition Inquiry" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 transition-colors">
+            <span class="material-symbols-outlined text-lg">mail</span>
+          </a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-12">
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-widest text-secondary mb-6">Navigate</h4>
+          <ul class="space-y-4 text-sm font-light opacity-80">
+            <li><a href="{% url 'home' %}" class="hover:text-secondary transition-colors">Expeditions</a></li>
+            <li><a href="{% url 'journal' %}" class="hover:text-secondary transition-colors">Journal</a></li>
+            <li><a href="{% url 'about' %}" class="hover:text-secondary transition-colors">About Georgia</a></li>
+            <li><a href="{% url 'privacy' %}" class="hover:text-secondary transition-colors">Privacy Policy</a></li>
+            <li><a href="{% url 'terms' %}" class="hover:text-secondary transition-colors">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
+          <h4 class="text-xs font-bold uppercase tracking-widest text-secondary mb-4">Concierge</h4>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-[#25D366] rounded-2xl flex items-center justify-center text-white flex-shrink-0">
+              <span class="material-symbols-outlined text-2xl">chat</span>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-bold opacity-60">WhatsApp Direct</p>
+              <a href="https://wa.me/{{ site.whatsapp_number|default:'+995555010203'|cut:' '|cut:'+' }}" target="_blank" class="text-sm font-bold hover:text-[#25D366] transition-colors">
+                {{ site.whatsapp_number|default:"+995 555 010 203" }}
+              </a>
+            </div>
+          </div>
+          <p class="text-xs opacity-60 leading-relaxed">{{ site.physical_address|default:"Tbilisi, Georgia" }} • Professional curation for global explorers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-12 text-xs opacity-40 px-6">
+      © {{ "now"|date:"Y" }} {{ site.site_name|default:"The Editorial Expedition" }}. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ─── Mobile Bottom Nav ─────────────────────────────────────────────────── -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-end pb-4 px-6 bg-[#fbfbe2]/90 backdrop-blur-lg z-30 rounded-t-[2rem] shadow-[0_-10px_40px_rgba(21,66,18,0.08)]">
+    <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}flex flex-col items-center justify-center bg-[#154212] text-[#fbfbe2] rounded-full p-3 w-14 h-14 -translate-y-4 shadow-lg active:scale-90 transition-all duration-200{% else %}flex flex-col items-center justify-center text-[#154212]/60 p-2 hover:bg-[#154212]/10 rounded-full transition-all active:scale-90 duration-200{% endif %}">
+      <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'home' %}text-xl{% endif %}">explore</span>
+      <span class="text-[7px] font-semibold uppercase tracking-widest mt-0.5">Explore</span>
+    </a>
+    <a href="{% url 'journal' %}" class="{% if request.resolver_match.url_name == 'journal' %}flex flex-col items-center justify-center bg-[#154212] text-[#fbfbe2] rounded-full p-3 w-14 h-14 -translate-y-4 shadow-lg active:scale-90 transition-all duration-200{% else %}flex flex-col items-center justify-center text-[#154212]/60 p-2 hover:bg-[#154212]/10 rounded-full transition-all active:scale-90 duration-200{% endif %}">
+      <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'journal' %}text-xl{% endif %}">menu_book</span>
+      <span class="text-[7px] font-semibold uppercase tracking-widest mt-0.5">Journal</span>
+    </a>
+    <a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}flex flex-col items-center justify-center bg-[#154212] text-[#fbfbe2] rounded-full p-3 w-14 h-14 -translate-y-4 shadow-lg active:scale-90 transition-all duration-200{% else %}flex flex-col items-center justify-center text-[#154212]/60 p-2 hover:bg-[#154212]/10 rounded-full transition-all active:scale-90 duration-200{% endif %}">
+      <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'about' %}text-xl{% endif %}">public</span>
+      <span class="text-[7px] font-semibold uppercase tracking-widest mt-0.5">Georgia</span>
+    </a>
+    <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="{% if request.resolver_match.url_name == 'profile' %}flex flex-col items-center justify-center bg-[#154212] text-[#fbfbe2] rounded-full p-3 w-14 h-14 -translate-y-4 shadow-lg active:scale-90 transition-all duration-200{% else %}flex flex-col items-center justify-center text-[#154212]/60 p-2 hover:bg-[#154212]/10 rounded-full transition-all active:scale-90 duration-200{% endif %}">
+      <span class="material-symbols-outlined {% if request.resolver_match.url_name == 'profile' %}text-xl{% endif %}">person</span>
+      <span class="text-[7px] font-semibold uppercase tracking-widest mt-0.5">{% if user.is_authenticated %}Profile{% else %}Login{% endif %}</span>
+    </a>
+  </nav>
+
+  <script>
+    function openMobileMenu() {
+      document.getElementById('mobile-drawer').classList.add('open');
+      document.getElementById('drawer-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobile-drawer').classList.remove('open');
+      document.getElementById('drawer-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeMobileMenu();
+    });
+  </script>
+    <!-- ── WhatsApp Persistent Button ─────────────────────────────────────────── -->
+    {% if site.whatsapp_number %}
+    <style>
+        .whatsapp-fixed {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background-color: #25d366;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: whatsapp-pulse 2s infinite;
+        }
+        .whatsapp-fixed:hover {
+            transform: scale(1.1);
+            background-color: #128c7e;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        .whatsapp-fixed svg {
+            width: 35px;
+            height: 35px;
+            fill: #fff;
+        }
+        @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        @media (max-width: 768px) {
+            .whatsapp-fixed {
+                width: 55px;
+                height: 55px;
+                bottom: 85px; /* Stay above the mobile bottom nav */
+                right: 20px;
+            }
+            .whatsapp-fixed svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    </style>
+    <a href="https://wa.me/{{ site.whatsapp_number|cut:' '|cut:'+'|cut:'-'|cut:'('|cut:')' }}" class="whatsapp-fixed" target="_blank" title="Contact us on WhatsApp">
+        <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.1 0-65.6-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-5.5-2.8-23.2-8.5-44.2-27.1-16.4-14.6-27.4-32.7-30.6-38.1-3.2-5.5-.3-8.4 2.4-11.1 2.5-2.5 5.5-6.5 8.3-9.7 2.8-3.2 3.7-5.5 5.5-9.2 1.9-3.7 1-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.8 23.5 9.2 31.5 11.8 13.3 4.2 25.4 3.6 35 2.2 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+        </svg>
+    </a>
+    {% endif %}
+
+</body>
+</html>

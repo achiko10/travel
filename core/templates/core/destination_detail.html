@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-24 pb-20 bg-surface-container-lowest">
+    <!-- Hero Header -->
+    <div class="relative w-full h-[40vh] md:h-[50vh] overflow-hidden rounded-b-[3rem]">
+        <img src="{{ dest.image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-10 md:p-20 max-w-7xl mx-auto w-full">
+            <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-4 inline-block">Destination</span>
+            <h1 class="text-5xl md:text-7xl font-serif italic text-white leading-tight">{{ dest.name }}</h1>
+            <p class="text-white/80 font-bold uppercase tracking-widest mt-4">{{ dest.region }}</p>
+        </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="max-w-7xl mx-auto px-6 mt-16">
+        <h2 class="text-3xl font-serif italic text-primary mb-10">Expeditions in {{ dest.name }}</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for exp in expeditions %}
+            <a href="{% url 'expedition_detail' exp.pk %}" class="bg-surface-container-low rounded-[2rem] overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col block cursor-pointer border border-outline-variant/10">
+                <div class="relative h-56 overflow-hidden flex-shrink-0">
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ exp.image_url }}"/>
+                  <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full font-bold text-primary text-sm shadow-sm">${{ exp.price }}</div>
+                </div>
+                <div class="p-6 flex flex-col flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-secondary text-xs" data-icon="schedule">schedule</span>
+                    <span class="text-[10px] font-bold text-outline uppercase tracking-widest">{{ exp.duration_days }} Days • {{ exp.category.name|default:"Tour" }}</span>
+                  </div>
+                  <h3 class="text-xl font-serif text-primary mb-3 leading-tight italic">{{ exp.title }}</h3>
+                  <p class="text-xs text-outline leading-relaxed flex-1">{{ exp.description|truncatewords:15 }}</p>
+                  
+                  <div class="w-full mt-6 text-secondary font-bold text-sm flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      View Expedition Details <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+                  </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full py-16 text-center bg-surface-container-low rounded-3xl border border-outline-variant/20">
+                <span class="material-symbols-outlined text-4xl text-outline mb-4">landscape</span>
+                <p class="text-primary font-bold">No expeditions scheduled here yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+{% endblock %}

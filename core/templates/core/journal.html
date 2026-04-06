@@ -1,0 +1,55 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-32 pb-20 bg-surface-container-lowest">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+        <span class="material-symbols-outlined text-6xl text-secondary mb-6 block">menu_book</span>
+        <h1 class="text-5xl font-serif italic text-primary mb-4">The Editorial Journal</h1>
+        <p class="text-xl text-outline mb-16 max-w-2xl mx-auto">Essays, field notes, and insider perspectives on deep-culture exploration across the Georgian Caucasus.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+            {% for article in articles %}
+            <!-- dynamic article -->
+            <a href="{% url 'article_detail' article.pk %}" class="bg-surface-container-low rounded-[2rem] overflow-hidden group cursor-pointer border border-outline-variant/20 hover:shadow-xl transition-shadow block flex flex-col">
+                <div class="h-64 overflow-hidden bg-surface-container flex-shrink-0">
+                    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                         src="{{ article.image_url|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' }}"
+                         alt="{{ article.title }}"/>
+                </div>
+                <div class="p-8 flex flex-col flex-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-secondary mb-2 block">{{ article.category }}</span>
+                    <h3 class="text-2xl font-serif italic text-primary mb-4 leading-tight">{{ article.title }}</h3>
+                    <p class="text-sm text-outline leading-relaxed mb-6 flex-1">{{ article.content|truncatewords:20 }}</p>
+                    <span class="text-xs font-bold text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform mt-auto">
+                        Read Essay <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                    </span>
+                </div>
+            </a>
+            {% empty %}
+            <!-- Article 1: Coming Soon (Fallback if DB is empty) -->
+            <div class="bg-surface-container-low rounded-[2rem] overflow-hidden border border-outline-variant/20 md:col-span-full">
+                <div class="h-64 bg-surface-container flex items-center justify-center">
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-5xl text-outline/40 block mb-2">edit_note</span>
+                        <p class="text-xs font-bold text-outline uppercase tracking-widest">In the Field</p>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-outline mb-2 block">Coming Soon</span>
+                    <h3 class="text-2xl font-serif italic text-outline mb-4 leading-tight">No dispatches published yet.</h3>
+                    <p class="text-sm text-outline/60 leading-relaxed">Our correspondents are currently writing dispatches from the Georgian high ranges. Check back soon.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Browse Expeditions CTA -->
+        <div class="mt-20 py-16 border-t border-outline-variant/20">
+            <p class="text-outline mb-6 text-lg">Ready to stop reading and start exploring?</p>
+            <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-primary text-on-primary px-10 py-4 rounded-2xl font-bold hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-lg">
+                Browse Expeditions <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

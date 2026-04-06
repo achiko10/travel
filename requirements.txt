@@ -1,0 +1,5 @@
+Django>=4.2.0,<5.0.0
+sqlparse
+asgiref
+tzdata
+# requests (used urllib in this project, but good to have)

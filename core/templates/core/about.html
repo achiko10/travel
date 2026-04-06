@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<main class="min-h-screen pt-32 pb-20 bg-surface-container-lowest">
+    <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <span class="material-symbols-outlined text-6xl text-primary mb-6">public</span>
+            <h1 class="text-5xl font-serif italic text-primary mb-6">{{ site.about_title|default:"About The Expedition" }}</h1>
+            <p class="text-xl text-outline leading-relaxed max-w-2xl mx-auto">{{ site.about_subtitle|default:"We are an independent, boutique travel studio dedicated to curating unparalleled deep-culture immersions." }}</p>
+        </div>
+        
+        <div class="bg-surface-container-low p-10 md:p-16 rounded-[3rem] border border-outline-variant/20 shadow-xl mb-16">
+            <h2 class="text-3xl font-serif italic text-primary mb-6">{{ site.philosophy_title|default:"Our Philosophy" }}</h2>
+            <div class="space-y-6 text-outline text-lg leading-relaxed">
+                {{ site.philosophy_content|default:"Our philosophy is rooted in Slow Travel and Authentic Immersion."|linebreaks }}
+            </div>
+        </div>
+        
+        <div class="text-center">
+            <h3 class="text-xl font-serif italic text-secondary mb-6">Ready to explore?</h3>
+            <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-2xl font-bold hover:bg-primary-container transition-colors shadow-lg">
+                View Upcoming Expeditions <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}
