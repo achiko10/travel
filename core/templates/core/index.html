@@ -6,7 +6,7 @@
     <section class="px-6 max-w-7xl mx-auto mb-16">
       <div class="relative overflow-hidden rounded-[2.5rem] bg-surface-container-low min-h-[600px] flex flex-col justify-end p-8 md:p-16">
         <div class="absolute inset-0 z-0">
-          <img class="w-full h-full object-cover" src="{{ site.hero_image_url|default:'https://lh3.googleusercontent.com/aida-public/AB6AXuBoJyvC6JISUH2X3UsrQS-jVVCS7JHAIVQIFz274NpAje522P6uHCDiOMpviGHPnpg0lKBdoVbc_ICWGwZdN34_5SmhVhDdjyikC9uFb0Um7BbI8JrdYT6EZmdsAp7GMRQ4KEQIM-J48bSUnyQ4YRQggt90HooZ3P8X7yjcltfKr8Nqd-noWwKUjD_wMwscPM5JrdB10kiAbFO39Yj-GLU-R02vG0kgXkpYfzLLLOgjxvf_bJNXP4l7oJSKb6yZOVuzhZ6qL5VzVUcc' }}"/>
+          <img class="w-full h-full object-cover" src="{% if site.hero_image %}{{ site.hero_image.url }}{% else %}https://lh3.googleusercontent.com/aida-public/AB6AXuBoJyvC6JISUH2X3UsrQS-jVVCS7JHAIVQIFz274NpAje522P6uHCDiOMpviGHPnpg0lKBdoVbc_ICWGwZdN34_5SmhVhDdjyikC9uFb0Um7BbI8JrdYT6EZmdsAp7GMRQ4KEQIM-J48bSUnyQ4YRQggt90HooZ3P8X7yjcltfKr8Nqd-noWwKUjD_wMwscPM5JrdB10kiAbFO39Yj-GLU-R02vG0kgXkpYfzLLLOgjxvf_bJNXP4l7oJSKb6yZOVuzhZ6qL5VzVUcc{% endif %}"/>
           <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
         </div>
         <div class="relative z-10 max-w-2xl">
@@ -66,8 +66,8 @@
     <section class="px-6 max-w-7xl mx-auto mb-20">
       <div class="flex justify-between items-end mb-10">
         <div>
-          <h2 class="text-4xl font-serif italic text-primary mb-2">Top Destinations</h2>
-          <p class="text-outline">The quintessential Georgian experience</p>
+          <h2 class="text-4xl font-serif italic text-primary mb-2">{{ site.top_destinations_title|default:"Top Destinations" }}</h2>
+          <p class="text-outline">{{ site.top_destinations_subtitle|default:"The quintessential Georgian experience" }}</p>
         </div>
         <a href="?location=" class="text-secondary font-bold flex items-center gap-2 hover:translate-x-1 transition-transform">
           View All <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
@@ -77,7 +77,7 @@
         {% for dest in destinations %}
         <a href="{% url 'destination_detail' dest.pk %}" class="group cursor-pointer block">
           <div class="relative aspect-[3/4] rounded-[2rem] overflow-hidden mb-4">
-            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{{ dest.image_url }}"/>
+            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="{% if dest.image %}{{ dest.image.url }}{% else %}https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=800&fit=crop{% endif %}"/>
             <div class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/60 to-transparent">
               <span class="text-tertiary-fixed-dim text-xs font-bold uppercase tracking-widest">{{ dest.region }}</span>
               <p class="text-white font-serif text-xl italic">{{ dest.name }}</p>
@@ -93,8 +93,8 @@
       <div class="mb-12">
         {% if featured_media %}
         <!-- ID defined to allow JS click handler -->
-        <div id="video-modal-trigger" class="relative w-full aspect-video rounded-[3rem] overflow-hidden mb-12 shadow-2xl group cursor-pointer" onclick="window.open('{{ featured_media.video_url|default:featured_media.image_url }}', '_blank')">
-          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="{{ featured_media.image_url }}"/>
+        <div id="video-modal-trigger" class="relative w-full aspect-video rounded-[3rem] overflow-hidden mb-12 shadow-2xl group cursor-pointer" onclick="window.open('{% if featured_media.video_file %}{{ featured_media.video_file.url }}{% else %}{{ featured_media.video_url }}{% endif %}', '_blank')">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" src="{% if featured_media.image %}{{ featured_media.image.url }}{% endif %}"/>
           <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
             <div class="w-20 h-20 rounded-full bg-surface/30 backdrop-blur-md flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-300">
               <span class="material-symbols-outlined text-4xl" data-icon="play_arrow" data-variation-settings="'FILL' 1">play_arrow</span>
@@ -168,15 +168,15 @@
           <!-- Tour Grid -->
           <div class="flex-grow" id="results">
             <h2 class="text-3xl font-serif italic text-primary mb-8">
-                {% if expeditions|length == 0 %} No Expeditions Found
-                {% else %} Curated Expeditions ({{ expeditions|length }})
+                {% if expeditions|length == 0 %} {{ site.tours_section_empty|default:"No Expeditions Found" }}
+                {% else %} {{ site.tours_section_title|default:"Curated Expeditions" }} ({{ expeditions|length }})
                 {% endif %}
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
               {% for exp in expeditions %}
               <a href="{% url 'expedition_detail' exp.pk %}" class="bg-surface-container-lowest rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-500 flex flex-col cursor-pointer block">
                 <div class="relative h-64 overflow-hidden flex-shrink-0">
-                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ exp.image_url }}"/>
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{% if exp.image %}{{ exp.image.url }}{% else %}https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop{% endif %}"/>
                   <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full font-bold text-primary shadow-sm">${{ exp.price }}</div>
                 </div>
                 <div class="p-8 flex flex-col flex-1">

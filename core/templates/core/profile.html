@@ -122,7 +122,7 @@
                         {% for booking in bookings %}
                         <div class="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/20 flex flex-col md:flex-row gap-6 md:items-center justify-between">
                             <div class="flex gap-4 items-center">
-                                <img src="{{ booking.expedition.image_url }}" alt="{{ booking.expedition.title }}" class="w-16 h-16 rounded-xl object-cover">
+                                <img src="{% if booking.expedition.image %}{{ booking.expedition.image.url }}{% else %}https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop{% endif %}" alt="{{ booking.expedition.title }}" class="w-16 h-16 rounded-xl object-cover">
                                 <div>
                                     <h4 class="font-bold text-primary text-lg">{{ booking.expedition.title }}</h4>
                                     <p class="text-sm text-outline">{{ booking.travel_date|date:"F d, Y" }} &bull; {{ booking.group_size }} Explorer{{ booking.group_size|pluralize }}</p>

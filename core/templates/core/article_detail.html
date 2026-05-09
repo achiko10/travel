@@ -4,7 +4,7 @@
 <main class="min-h-screen pt-24 pb-20 bg-surface-container-lowest">
     <!-- Hero Header -->
     <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden rounded-b-[3rem]">
-        <img src="{{ article.image_url|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' }}" alt="{{ article.title }}" class="w-full h-full object-cover"/>
+        <img src="{% if article.image %}{{ article.image.url }}{% else %}https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop{% endif %}" alt="{{ article.title }}" class="w-full h-full object-cover"/>
         <div class="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-10 md:p-20 max-w-4xl mx-auto w-full text-center">
             <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-6 mx-auto inline-block">{{ article.category }}</span>
             <h1 class="text-4xl md:text-6xl font-serif italic text-white leading-tight mx-auto mb-4">{{ article.title }}</h1>

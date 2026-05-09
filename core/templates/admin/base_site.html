@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block branding %}
+<div style="display: flex; align-items: center; gap: 20px;">
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:"Django Administration" }}</a></h1>
+    <div style="display: flex; gap: 10px;">
+        <a href="/admin/core/siteconfiguration/" 
+           style="background: #e74c3c; color: white; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <span>⚙️ საიტის პარამეტრები</span>
+        </a>
+        <a href="/" target="_blank"
+           style="background: #2c3e50; color: white; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s;">
+            <span>👁️ საიტის ნახვა</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    #header { background: #1a1a1a !important; }
+    #branding h1 a { color: #f39c12 !important; }
+    .module h2, .module caption, .inline-group h2 { background: #34495e !important; }
+    div.breadcrumbs { background: #f8f9fa !important; border-bottom: 1px solid #dee2e6; }
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: #27ae60 !important;
+        border-radius: 4px !important;
+    }
+</style>
+{% endblock %}

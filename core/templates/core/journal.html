@@ -13,7 +13,7 @@
             <a href="{% url 'article_detail' article.pk %}" class="bg-surface-container-low rounded-[2rem] overflow-hidden group cursor-pointer border border-outline-variant/20 hover:shadow-xl transition-shadow block flex flex-col">
                 <div class="h-64 overflow-hidden bg-surface-container flex-shrink-0">
                     <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                         src="{{ article.image_url|default:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop' }}"
+                         src="{% if article.image %}{{ article.image.url }}{% else %}https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop{% endif %}"
                          alt="{{ article.title }}"/>
                 </div>
                 <div class="p-8 flex flex-col flex-1">

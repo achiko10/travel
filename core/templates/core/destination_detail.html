@@ -4,7 +4,7 @@
 <main class="min-h-screen pt-24 pb-20 bg-surface-container-lowest">
     <!-- Hero Header -->
     <div class="relative w-full h-[40vh] md:h-[50vh] overflow-hidden rounded-b-[3rem]">
-        <img src="{{ dest.image_url }}" alt="{{ dest.name }}" class="w-full h-full object-cover"/>
+        <img src="{% if dest.image %}{{ dest.image.url }}{% else %}https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=800&fit=crop{% endif %}" alt="{{ dest.name }}" class="w-full h-full object-cover"/>
         <div class="absolute inset-0 bg-black/40 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-10 md:p-20 max-w-7xl mx-auto w-full">
             <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-4 inline-block">Destination</span>
             <h1 class="text-5xl md:text-7xl font-serif italic text-white leading-tight">{{ dest.name }}</h1>
@@ -20,7 +20,7 @@
             {% for exp in expeditions %}
             <a href="{% url 'expedition_detail' exp.pk %}" class="bg-surface-container-low rounded-[2rem] overflow-hidden group hover:shadow-xl transition-all duration-500 flex flex-col block cursor-pointer border border-outline-variant/10">
                 <div class="relative h-56 overflow-hidden flex-shrink-0">
-                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{{ exp.image_url }}"/>
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{% if exp.image %}{{ exp.image.url }}{% else %}https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop{% endif %}"/>
                   <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-3 py-1 rounded-full font-bold text-primary text-sm shadow-sm">${{ exp.price }}</div>
                 </div>
                 <div class="p-6 flex flex-col flex-1">

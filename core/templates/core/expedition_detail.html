@@ -5,7 +5,7 @@
 
     <!-- Hero -->
     <div class="relative w-full h-[50vh] md:h-[60vh] overflow-hidden rounded-b-[3rem]">
-        <img src="{{ exp.image_url }}" alt="{{ exp.title }}" class="w-full h-full object-cover"/>
+        <img src="{% if exp.image %}{{ exp.image.url }}{% else %}https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop{% endif %}" alt="{{ exp.title }}" class="w-full h-full object-cover"/>
         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-10 md:p-20">
             <div class="max-w-7xl mx-auto w-full">
                 <span class="bg-secondary text-on-secondary px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest w-max mb-4 inline-block">{{ exp.category.name|default:"Expedition" }}</span>
