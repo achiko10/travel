@@ -41,6 +41,7 @@ class HomeView(SiteContextMixin, TemplateView):
         else:
             expeditions = Expedition.objects.filter(is_featured=True)
 
+
         if location:
             expeditions = expeditions.filter(location__name__icontains=location)
         if category_id and category_id.isdigit():
@@ -110,7 +111,7 @@ class CheckoutView(LoginRequiredMixin, View):
                 full_name=form.cleaned_data['full_name'],
                 travel_date=form.cleaned_data['travel_date'],
                 group_size=group_size,
-                total_price=expedition.price * group_size,
+                total_price=(expedition.discount_price if expedition.discount_price else expedition.price) * group_size,
             )
             
             # Send Telegram notification (asynchronously in a real app, 

@@ -177,7 +177,15 @@
               <a href="{% url 'expedition_detail' exp.pk %}" class="bg-surface-container-lowest rounded-[2.5rem] overflow-hidden group hover:shadow-2xl transition-all duration-500 flex flex-col cursor-pointer block">
                 <div class="relative h-64 overflow-hidden flex-shrink-0">
                   <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="{% if exp.image %}{{ exp.image.url }}{% else %}https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop{% endif %}"/>
-                  <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full font-bold text-primary shadow-sm">${{ exp.price }}</div>
+                  <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full font-bold text-primary shadow-sm flex items-center gap-1.5">
+                    <span class="text-[10px] text-outline uppercase tracking-wider font-bold">from</span>
+                    {% if exp.discount_price %}
+                      <span class="text-xs text-outline line-through">${{ exp.price }}</span>
+                      <span class="text-secondary">${{ exp.discount_price }}</span>
+                    {% else %}
+                      <span>${{ exp.price }}</span>
+                    {% endif %}
+                  </div>
                 </div>
                 <div class="p-8 flex flex-col flex-1">
                   <div class="flex items-center gap-2 mb-3">
@@ -185,7 +193,7 @@
                     <span class="text-xs font-bold text-outline uppercase tracking-widest">{{ exp.duration_days }} Days • {{ exp.category.name|default:"Trekking" }}</span>
                   </div>
                   <h3 class="text-2xl font-serif text-primary mb-4 leading-tight italic">{{ exp.title }}</h3>
-                  <p class="text-sm text-outline mb-6 leading-relaxed flex-1">{{ exp.description }}</p>
+                  <p class="text-sm text-outline mb-6 leading-relaxed flex-1">{{ exp.description|truncatewords_html:25|safe }}</p>
                   
                   <!-- BOOKING: Link to Detail Page -->
                   <div class="w-full border-2 border-primary text-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-2 group-hover:bg-primary group-hover:text-on-primary transition-colors mt-auto">

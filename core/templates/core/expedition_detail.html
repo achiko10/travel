@@ -15,7 +15,12 @@
                         <span class="material-symbols-outlined text-sm">schedule</span> {{ exp.duration_days }} Days
                     </span>
                     <span class="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-4 py-2 text-sm font-bold">
-                        <span class="material-symbols-outlined text-sm">payments</span> ${{ exp.price }} USD
+                        <span class="material-symbols-outlined text-sm">payments</span> 
+                        {% if exp.discount_price %}
+                            <span class="line-through text-white/50">${{ exp.price }}</span> ${{ exp.discount_price }} USD
+                        {% else %}
+                            ${{ exp.price }} USD
+                        {% endif %}
                     </span>
                     {% if exp.location %}
                     <span class="flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-full px-4 py-2 text-sm font-bold">
@@ -34,7 +39,7 @@
         <div class="lg:col-span-2 space-y-12">
             <div>
                 <h2 class="text-3xl font-serif italic text-primary mb-4">About This Expedition</h2>
-                <p class="text-outline leading-relaxed text-lg">{{ exp.description }}</p>
+                <div class="text-outline leading-relaxed text-lg prose prose-stone max-w-none">{{ exp.description|safe }}</div>
             </div>
 
             <div>
@@ -96,7 +101,15 @@
 
                     <div class="flex justify-between items-baseline mb-6 pb-6 border-b border-outline-variant/20">
                         <span class="text-xs font-bold text-outline uppercase tracking-widest">Price / Person</span>
-                        <span class="text-4xl font-serif italic text-primary">${{ exp.price }}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-outline font-bold uppercase tracking-widest">from</span>
+                            {% if exp.discount_price %}
+                                <span class="text-sm text-outline line-through">${{ exp.price }}</span>
+                                <span class="text-4xl font-serif italic text-primary">${{ exp.discount_price }}</span>
+                            {% else %}
+                                <span class="text-4xl font-serif italic text-primary">${{ exp.price }}</span>
+                            {% endif %}
+                        </div>
                     </div>
 
                     <!-- BOOKING FORM -->
@@ -127,7 +140,7 @@
                         <!-- Live Total Calculator -->
                         <div class="bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 flex justify-between items-center">
                             <span class="text-xs font-bold text-outline uppercase tracking-widest">Est. Total</span>
-                            <span id="total-price" class="text-xl font-serif italic text-primary font-bold">${{ exp.price }}</span>
+                            <span id="total-price" class="text-xl font-serif italic text-primary font-bold">${% if exp.discount_price %}{{ exp.discount_price }}{% else %}{{ exp.price }}{% endif %}</span>
                         </div>
 
                         <!-- MAIN ACTION -->
@@ -138,7 +151,7 @@
 
                         <!-- Quick Question -->
                         <a href="https://wa.me/{{ site.whatsapp_number|default:'+995555010203'|cut:' '|cut:'+' }}?text={{ exp.title|urlencode }}%20-%20Quick%20question" target="_blank"
-                            class="w-full border-2 border-[#25D366] text-[#25D366] py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#25D366]/10 transition-colors cursor-pointer text-sm block text-center">
+                             class="w-full border-2 border-[#25D366] text-[#25D366] py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-[#25D366]/10 transition-colors cursor-pointer text-sm block text-center">
                             <span class="material-symbols-outlined text-sm">chat</span>
                             Ask a Question First
                         </a>
@@ -156,7 +169,7 @@
 </main>
 
 <script>
-    var basePrice = parseInt("{{ exp.price }}");
+    var basePrice = parseInt("{% if exp.discount_price %}{{ exp.discount_price }}{% else %}{{ exp.price }}{% endif %}");
 
     document.getElementById('b-size').addEventListener('change', function() {
         var total = basePrice * parseInt(this.value);

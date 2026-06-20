@@ -95,11 +95,24 @@ class DestinationAdmin(admin.ModelAdmin):
 # ── Expedition ─────────────────────────────────────────────────────────────────
 @admin.register(Expedition)
 class ExpeditionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image_preview', 'category', 'location', 'price', 'duration_days', 'is_featured')
+    list_display = ('title', 'image_preview', 'category', 'location', 'price', 'discount_price', 'duration_days', 'is_featured')
     list_filter = ('category', 'location', 'is_featured')
     search_fields = ('title', 'description')
-    list_editable = ('is_featured', 'price')
+    list_editable = ('is_featured', 'price', 'discount_price')
     ordering = ('-is_featured', 'title')
+
+    fieldsets = (
+        ("📌 ძირითადი ინფორმაცია (General Info)", {
+            "fields": ("title", "description", "category", "location", "duration_days")
+        }),
+        ("💰 ფასები და შეთავაზებები (Pricing & Offers)", {
+            "fields": ("price", "discount_price"),
+            "description": "თუ გსურთ ფასდაკლების აქტივაცია, ჩაწერეთ 'Discount Price' ველი. ძველი ფასი საიტზე ავტომატურად გადაიხაზება."
+        }),
+        ("🖼️ მედია და პარამეტრები (Media & Settings)", {
+            "fields": ("image", "is_featured")
+        }),
+    )
 
     def image_preview(self, obj):
         if obj.image:

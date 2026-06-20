@@ -107,6 +107,7 @@ class Expedition(models.Model):
     title = models.CharField(max_length=200, verbose_name="სათაური (Title)")
     description = HTMLField(verbose_name="აღწერა (Description)")
     price = models.IntegerField(verbose_name="ფასი (Price)")
+    discount_price = models.IntegerField(blank=True, null=True, verbose_name="ფასდაკლებული ფასი (Discount Price)", help_text="დატოვეთ ცარიელი, თუ ფასდაკლება არ არის")
     duration_days = models.IntegerField(verbose_name="ხანგრძლივობა დღეებში (Duration in Days)")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name="კატეგორია (Category)")
     location = models.ForeignKey(Destination, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="ლოკაცია (Location)")
