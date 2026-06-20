@@ -11,6 +11,7 @@ from .forms import CustomUserCreationForm, BookingForm, QuickBookingForm
 from .utils import send_telegram_notification, send_quick_lead_notification
 
 
+# -- Trigger commit --
 # ── Mixin: injects 'site' into every template automatically ──────────────────
 class SiteContextMixin:
     """Add this to any view to get {{ site }} in the template (footer, etc.)."""
