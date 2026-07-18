@@ -67,3 +67,29 @@ class QuickBookingForm(forms.Form):
         data = self.cleaned_data['phone_number']
         # Simple cleaning if needed
         return data
+
+
+from .models import Review
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['full_name', 'rating', 'comment', 'country_code', 'expedition']
+        widgets = {
+            'full_name': forms.TextInput(attrs={
+                'placeholder': 'Your Name',
+                'class': 'w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-medium text-sm placeholder:text-outline-variant'
+            }),
+            'comment': forms.Textarea(attrs={
+                'placeholder': 'Share your experience...',
+                'rows': 3,
+                'class': 'w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-medium text-sm placeholder:text-outline-variant'
+            }),
+            'country_code': forms.TextInput(attrs={
+                'placeholder': 'e.g. GE, DE, US',
+                'class': 'w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 focus:outline-none focus:border-secondary text-primary font-medium text-sm placeholder:text-outline-variant'
+            }),
+            'rating': forms.HiddenInput(),
+            'expedition': forms.HiddenInput(),
+        }
+

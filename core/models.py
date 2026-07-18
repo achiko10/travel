@@ -7,6 +7,7 @@ from tinymce.models import HTMLField
 class SiteConfiguration(models.Model):
     # Branding
     site_name = models.CharField(max_length=100, default="The Editorial Expedition", verbose_name="საიტის სახელი (Site Name)")
+    site_logo = models.ImageField(upload_to='logo/', blank=True, null=True, verbose_name="საიტის ლოგო (Site Logo)", help_text="ატვირთეთ საიტის ლოგო")
     contact_email = models.EmailField(default="hello@editorialexpedition.com", verbose_name="საკონტაქტო ელ-ფოსტა (Contact Email)")
     physical_address = models.CharField(max_length=255, default="Tbilisi, Georgia", verbose_name="მისამართი (Physical Address)")
     whatsapp_number = models.CharField(max_length=20, default="+995 555 010 203", verbose_name="WhatsApp ნომერი (WhatsApp Number)")
@@ -214,3 +215,40 @@ class QuickLead(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.created_at.strftime('%Y-%m-%d')})"
+
+
+class Review(models.Model):
+    expedition = models.ForeignKey(Expedition, on_delete=models.CASCADE, related_name='reviews', null=True, blank=True, verbose_name="ტური (Expedition)")
+    full_name = models.CharField(max_length=150, verbose_name="სახელი (Full Name)")
+    rating = models.PositiveIntegerField(default=5, verbose_name="რეიტინგი (Rating)")
+    comment = models.TextField(verbose_name="კომენტარი (Comment)")
+    country_code = models.CharField(max_length=10, blank=True, verbose_name="ქვეყნის კოდი (Country Code)", help_text="მაგ. GE, DE, US, FR, UA")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="შექმნის თარიღი (Created At)")
+    is_approved = models.BooleanField(default=True, verbose_name="აქტიურია? (Is Approved?)")
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "შეფასება (Review)"
+        verbose_name_plural = "შეფასებები (Reviews)"
+
+    def __str__(self):
+        return f"{self.full_name} - {self.rating} Stars"
+
+
+class ItineraryDay(models.Model):
+    expedition = models.ForeignKey(Expedition, on_delete=models.CASCADE, related_name='itinerary_days', verbose_name="ტური (Expedition)")
+    day_number = models.PositiveIntegerField(verbose_name="დღე (Day Number)")
+    title = models.CharField(max_length=200, verbose_name="სათაური (Title)")
+    location = models.CharField(max_length=100, blank=True, verbose_name="ლოკაცია (Location)")
+    description = models.TextField(verbose_name="აღწერა (Description)")
+    schedule = models.TextField(blank=True, verbose_name="განრიგი (Schedule)", help_text="ხაზ-ხაზად, მაგ:\n14:00 - Airport Pickup\n15:00 - Hotel Check-in")
+    image = models.ImageField(upload_to='itinerary/', blank=True, null=True, verbose_name="სურათი (Image)")
+
+    class Meta:
+        ordering = ['day_number']
+        verbose_name = "მარშრუტის დღე (Itinerary Day)"
+        verbose_name_plural = "მარშრუტის დღეები (Itinerary Days)"
+
+    def __str__(self):
+        return f"Day {self.day_number} - {self.title}"
+

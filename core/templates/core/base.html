@@ -59,7 +59,14 @@
   <div id="drawer-backdrop" onclick="closeMobileMenu()" class="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"></div>
   <div id="mobile-drawer" class="fixed top-0 left-0 h-full w-72 bg-[#fbfbe2] z-50 shadow-2xl flex flex-col p-8">
     <div class="flex justify-between items-center mb-10">
-      <span class="font-black text-[#154212] text-lg">The Editorial</span>
+      <div class="flex items-center gap-2">
+        {% if site.site_logo %}
+          <img src="{{ site.site_logo.url }}" alt="Logo" class="h-9 w-auto" style="mix-blend-mode:multiply">
+        {% else %}
+          <img src="/media/logo/logo.jpg" alt="Logo" class="h-9 w-auto" style="mix-blend-mode:multiply">
+        {% endif %}
+        <span class="font-black text-[#154212] text-lg">{{ site.site_name|default:"Landmark of Georgia" }}</span>
+      </div>
       <button onclick="closeMobileMenu()" class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center cursor-pointer hover:bg-surface-container-highest transition-colors">
         <span class="material-symbols-outlined text-primary">close</span>
       </button>
@@ -104,7 +111,14 @@
     <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
       <div class="flex items-center gap-4">
         <button onclick="openMobileMenu()" class="material-symbols-outlined text-[#154212] cursor-pointer active:scale-95 transition-transform bg-transparent border-none p-0" aria-label="Open menu">menu</button>
-        <a href="{% url 'home' %}" class="text-xl md:text-2xl font-black text-[#154212] tracking-tighter">{{ site.site_name|default:"The Editorial Expedition" }}</a>
+        <a href="{% url 'home' %}" class="flex items-center gap-2 text-xl md:text-2xl font-black text-[#154212] tracking-tighter">
+          {% if site.site_logo %}
+            <img src="{{ site.site_logo.url }}" alt="Logo" class="h-10 w-auto" style="mix-blend-mode:multiply">
+          {% else %}
+            <img src="/media/logo/logo.jpg" alt="Logo" class="h-10 w-auto" style="mix-blend-mode:multiply">
+          {% endif %}
+          <span>{{ site.site_name|default:"Landmark of Georgia" }}</span>
+        </a>
       </div>
       <div class="hidden md:flex items-center gap-8">
         <a class="{% if request.resolver_match.url_name == 'home' %}text-[#944925] font-bold border-b-2 border-[#944925] pb-1{% else %}text-[#154212] font-medium hover:text-[#944925] transition-colors{% endif %}" href="{% url 'home' %}">Explore</a>

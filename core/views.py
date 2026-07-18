@@ -5,9 +5,9 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import (
     SiteConfiguration, Category, Destination, Expedition, 
-    FeaturedMedia, Booking, Article, QuickLead
+    FeaturedMedia, Booking, Article, QuickLead, Review, ItineraryDay
 )
-from .forms import CustomUserCreationForm, BookingForm, QuickBookingForm
+from .forms import CustomUserCreationForm, BookingForm, QuickBookingForm, ReviewForm
 from .utils import send_telegram_notification, send_quick_lead_notification
 
 
@@ -71,6 +71,17 @@ class HomeView(SiteContextMixin, TemplateView):
         context['search_max_price']    = max_price if max_price else '2500'
         context['search_durations']    = duration_ranges
         context['price_filter_active'] = bool(max_price)
+        context['reviews']             = Review.objects.filter(is_approved=True)
+        context['review_form']         = ReviewForm()
+        
+        # Calculate rating stats
+        all_reviews = context['reviews']
+        if all_reviews.exists():
+            avg_rating = sum(r.rating for r in all_reviews) / all_reviews.count()
+            context['avg_rating'] = round(avg_rating, 1)
+        else:
+            context['avg_rating'] = 5.0
+        context['reviews_count']       = all_reviews.count()
         return context
 
 
@@ -79,6 +90,23 @@ class ExpeditionDetailView(SiteContextMixin, DetailView):
     model = Expedition
     template_name = 'core/expedition_detail.html'
     context_object_name = 'exp'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expedition = self.object
+        context['itinerary_days'] = expedition.itinerary_days.all().order_by('day_number')
+        context['reviews'] = expedition.reviews.filter(is_approved=True)
+        context['review_form'] = ReviewForm(initial={'expedition': expedition.pk})
+        
+        # Calculate rating stats for this specific expedition
+        exp_reviews = context['reviews']
+        if exp_reviews.exists():
+            avg_rating = sum(r.rating for r in exp_reviews) / exp_reviews.count()
+            context['avg_rating'] = round(avg_rating, 1)
+        else:
+            context['avg_rating'] = 5.0
+        context['reviews_count'] = exp_reviews.count()
+        return context
 
 
 # ── Destination detail ────────────────────────────────────────────────────────
@@ -200,3 +228,15 @@ class QuickBookingView(View):
                 'is_success': True
             })
         return redirect('home')
+
+
+class AddReviewView(View):
+    """Handles adding reviews."""
+    def post(self, request):
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.is_approved = True  # Automatically approve for now, or could default to False if moderation is strict
+            review.save()
+        return redirect(request.META.get('HTTP_REFERER', 'home'))
+

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from .models import (
     SiteConfiguration, Category, Destination, Expedition,
-    FeaturedMedia, Booking, Article, QuickLead
+    FeaturedMedia, Booking, Article, QuickLead, Review, ItineraryDay
 )
 
 # ── Admin Site Customization ───────────────────────────────────────────────────
@@ -17,7 +17,7 @@ class SiteConfigurationAdmin(admin.ModelAdmin):
     list_display = ('site_name', 'contact_email', 'whatsapp_number')
     fieldsets = (
         ("🏷️ Branding & Contact", {
-            "fields": ("site_name", "contact_email", "physical_address", "whatsapp_number"),
+            "fields": ("site_name", "site_logo", "contact_email", "physical_address", "whatsapp_number"),
         }),
         ("🖼️ Hero Section", {
             "fields": ("hero_image", "hero_title", "hero_subtitle"),
@@ -92,9 +92,16 @@ class DestinationAdmin(admin.ModelAdmin):
     image_preview.short_description = "Preview"
 
 
+class ItineraryDayInline(admin.TabularInline):
+    model = ItineraryDay
+    extra = 1
+    fields = ('day_number', 'title', 'location', 'description', 'schedule', 'image')
+
+
 # ── Expedition ─────────────────────────────────────────────────────────────────
 @admin.register(Expedition)
 class ExpeditionAdmin(admin.ModelAdmin):
+    inlines = [ItineraryDayInline]
     list_display = ('title', 'image_preview', 'category', 'location', 'price', 'discount_price', 'duration_days', 'is_featured')
     list_filter = ('category', 'location', 'is_featured')
     search_fields = ('title', 'description')
@@ -189,3 +196,14 @@ class QuickLeadAdmin(admin.ModelAdmin):
     search_fields = ('full_name', 'phone_number')
     ordering      = ('-created_at',)
     readonly_fields = ('created_at',)
+
+
+# ── Review ─────────────────────────────────────────────────────────────────────
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'rating', 'expedition', 'country_code', 'is_approved', 'created_at')
+    list_filter = ('rating', 'is_approved', 'created_at', 'expedition')
+    search_fields = ('full_name', 'comment', 'country_code')
+    list_editable = ('is_approved',)
+    ordering = ('-created_at',)
+

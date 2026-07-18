@@ -203,9 +203,216 @@
               </a>
               {% endfor %}
             </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reviews Section (Trusted by Travelers & Leave a Review) -->
+    <section class="px-6 max-w-7xl mx-auto mb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 bg-surface-container-low rounded-[3rem] p-8 md:p-12 border border-outline-variant/10">
+        
+        <!-- Left 2 Cols: Trusted by Travelers -->
+        <div class="lg:col-span-2 space-y-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-secondary font-bold text-xs uppercase tracking-widest mb-2">
+              <span class="material-symbols-outlined text-sm">star</span> Trusted by Travelers
+            </div>
+            <div class="flex items-baseline gap-4 mb-6">
+              <h2 class="text-5xl font-serif font-black text-primary">{{ avg_rating|default:"5.0" }}</h2>
+              <div class="flex flex-col">
+                <div class="flex text-secondary">
+                  <!-- stars -->
+                  <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                  <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                </div>
+                <span class="text-xs text-outline font-medium">({{ reviews_count|default:"0" }} Reviews)</span>
+              </div>
+            </div>
+
+            <!-- Review Cards Carousel -->
+            <div class="relative overflow-hidden w-full min-h-[180px]">
+              {% if reviews %}
+                <div id="reviews-slider" class="flex transition-transform duration-500 ease-in-out">
+                  {% for rev in reviews %}
+                  <div class="w-full flex-shrink-0 pr-4">
+                    <div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 shadow-sm space-y-4">
+                      <div class="flex text-secondary">
+                        {% for i in "12345" %}
+                          {% if forloop.counter <= rev.rating %}
+                            <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                          {% else %}
+                            <span class="material-symbols-outlined text-sm">star</span>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                      <p class="text-sm text-outline italic leading-relaxed">"{{ rev.comment }}"</p>
+                      <div class="flex items-center gap-3 pt-2">
+                        <img class="w-10 h-10 rounded-full object-cover bg-primary/10" src="https://ui-avatars.com/api/?name={{ rev.full_name|urlencode }}&background=154212&color=fff" alt="{{ rev.full_name }}">
+                        <div>
+                          <p class="text-xs font-bold text-primary flex items-center gap-1.5">
+                            {{ rev.full_name }}
+                            {% if rev.country_code %}
+                              <span class="text-sm" title="{{ rev.country_code }}">
+                                {% if rev.country_code == 'GE' %}🇬🇪
+                                {% elif rev.country_code == 'DE' %}🇩🇪
+                                {% elif rev.country_code == 'US' %}🇺🇸
+                                {% elif rev.country_code == 'FR' %}🇫🇷
+                                {% elif rev.country_code == 'UA' %}🇺🇦
+                                {% elif rev.country_code == 'IT' %}🇮🇹
+                                {% elif rev.country_code == 'GB' %}🇬🇧
+                                {% else %}{{ rev.country_code }}
+                                {% endif %}
+                              </span>
+                            {% endif %}
+                          </p>
+                          <p class="text-[10px] text-outline font-medium">{{ rev.created_at|date:"M d, Y" }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 shadow-sm">
+                  <p class="text-sm text-outline italic">No reviews yet. Be the first to leave a review!</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Carousel Controls -->
+          {% if reviews|length > 1 %}
+          <div class="flex items-center gap-4 pt-4">
+            <button onclick="slideReviews(-1)" class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-primary/5 active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-sm">arrow_back</span>
+            </button>
+            <div class="flex gap-1.5" id="slider-dots">
+              {% for rev in reviews %}
+                <span class="w-2 h-2 rounded-full bg-outline-variant/30 transition-all duration-300 {% if forloop.first %}bg-secondary w-4{% endif %}"></span>
+              {% endfor %}
+            </div>
+            <button onclick="slideReviews(1)" class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-primary hover:bg-primary/5 active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Right 1 Col: Leave a Review Form -->
+        <div class="bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/15 shadow-md flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-outline mb-4">Leave a Review</h3>
+            
+            <form action="{% url 'add_review' %}" method="POST" class="space-y-4" id="review-form">
+              {% csrf_token %}
+              
+              <!-- Interactive Star Picker -->
+              <div>
+                <label class="block text-[10px] uppercase font-bold tracking-widest text-outline mb-2">Your Rating</label>
+                <div class="flex items-center gap-1 text-outline-variant" id="star-picker">
+                  <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-secondary star-icon" data-val="1">star</span>
+                  <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-secondary star-icon" data-val="2">star</span>
+                  <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-secondary star-icon" data-val="3">star</span>
+                  <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-secondary star-icon" data-val="4">star</span>
+                  <span class="material-symbols-outlined text-2xl cursor-pointer hover:text-secondary star-icon" data-val="5">star</span>
+                </div>
+                <input type="hidden" name="rating" id="id_rating" value="5">
+              </div>
+
+              <div>
+                <label class="block text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Your Name</label>
+                {{ review_form.full_name }}
+              </div>
+              
+              <div>
+                <label class="block text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Country Code</label>
+                {{ review_form.country_code }}
+              </div>
+
+              <div>
+                <label class="block text-[10px] uppercase font-bold tracking-widest text-outline mb-1">Your Review</label>
+                {{ review_form.comment }}
+              </div>
+              
+              {{ review_form.expedition }}
+
+              <button type="submit" class="w-full bg-[#154212] text-white py-4 rounded-2xl font-bold hover:bg-[#20521b] active:scale-95 transition-all mt-2 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">rate_review</span> Submit Review
+              </button>
+            </form>
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- JS for Review Slider and Star Picker -->
+  <script>
+    // Slider
+    let currentSlide = 0;
+    const slider = document.getElementById('reviews-slider');
+    const totalSlides = parseInt("{{ reviews|length }}");
+    const dots = document.getElementById('slider-dots') ? document.getElementById('slider-dots').children : [];
+
+    function slideReviews(direction) {
+      if (!slider || totalSlides <= 1) return;
+      currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      // Update dots
+      for (let i = 0; i < dots.length; i++) {
+        if (i === currentSlide) {
+          dots[i].classList.add('bg-secondary', 'w-4');
+          dots[i].classList.remove('bg-outline-variant/30');
+        } else {
+          dots[i].classList.remove('bg-secondary', 'w-4');
+          dots[i].classList.add('bg-outline-variant/30');
+        }
+      }
+    }
+
+    // Star Picker
+    const stars = document.querySelectorAll('#star-picker .star-icon');
+    const ratingInput = document.getElementById('id_rating');
+
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        const val = parseInt(this.getAttribute('data-val'));
+        ratingInput.value = val;
+        highlightStars(val);
+      });
+
+      star.addEventListener('mouseover', function() {
+        const val = parseInt(this.getAttribute('data-val'));
+        highlightStars(val);
+      });
+
+      star.addEventListener('mouseleave', function() {
+        const val = parseInt(ratingInput.value);
+        highlightStars(val);
+      });
+    });
+
+    function highlightStars(count) {
+      stars.forEach((star, idx) => {
+        if (idx < count) {
+          star.style.fontVariationSettings = "'FILL' 1";
+          star.classList.add('text-secondary');
+          star.classList.remove('text-outline-variant');
+        } else {
+          star.style.fontVariationSettings = "'FILL' 0";
+          star.classList.remove('text-secondary');
+          star.classList.add('text-outline-variant');
+        }
+      });
+    }
+
+    // Initial highlighting (5 stars default)
+    highlightStars(5);
+  </script>
 {% endblock %}
